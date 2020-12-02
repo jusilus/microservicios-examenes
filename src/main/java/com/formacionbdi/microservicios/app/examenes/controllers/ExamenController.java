@@ -20,6 +20,21 @@ import com.formacionbdi.microservicios.commons.examenes.models.entity.Examen;
 
 @RestController
 public class ExamenController extends CommonController<Examen, ExamenService> {
+	
+	/* METODOS GET */
+	
+	@GetMapping("/filtrar/{term}")
+	public ResponseEntity<?> buscarPorNombre(@PathVariable String term) {
+		List<Examen> examenes = this.commonService.findByNombre(term);
+		return ResponseEntity.ok(examenes);
+	}
+
+	@GetMapping("/asignaturas")
+	public ResponseEntity<?> listarAsignaturas() {
+		return ResponseEntity.ok(commonService.findAllAsignaturas());
+	}
+	
+	/* METODOS PUT */
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> modificarExamen(@Valid @RequestBody Examen examen, BindingResult result,
@@ -40,16 +55,5 @@ public class ExamenController extends CommonController<Examen, ExamenService> {
 		examenDb.setPreguntas(examen.getPreguntas());
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(commonService.save(examenDb));
-	}
-
-	@GetMapping("/filtrar/{term}")
-	public ResponseEntity<?> buscarPorNombre(@PathVariable String term) {
-		List<Examen> examenes = this.commonService.findByNombre(term);
-		return ResponseEntity.ok(examenes);
-	}
-
-	@GetMapping("/asignaturas")
-	public ResponseEntity<?> listarAsignaturas() {
-		return ResponseEntity.ok(commonService.findAllAsignaturas());
-	}
+	}	
 }
